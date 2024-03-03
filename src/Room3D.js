@@ -39,14 +39,14 @@ function Room3D() {
 //  increse Box X direction by 1
   const handleBoxXdir=()=>{
      boxXnewDirX=boxdir[0]+1
-    setboxdir([boxXnewDirX,1,-2])
+    setboxdir([boxXnewDirX,boxnewYdir,boxnewZdir])
     
   }
 
 //  Decrease Box X direction by 1
   const handleBoxXdirReduce=()=>{
      boxXnewDirX=boxdir[0]-1
-    setboxdir([boxXnewDirX,1,-2])
+    setboxdir([boxXnewDirX,boxnewYdir,boxnewZdir])
     
   }
 
