@@ -1,18 +1,53 @@
 import React, { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 // import { MeshStandardMaterial } from 'three';
-import { OrbitControls, useGLTF } from '@react-three/drei'; // Import OrbitControls
+import { OrbitControls, Stats, useGLTF } from '@react-three/drei'; // Import OrbitControls
 // import { GLTFLoader } from 'three/addons/loaders/GLTFLoader';
 import roomglb from './temp-room2.glb'
+// import furn1glb from './assets/sofa.glb'
+import furn1glb from './assets/scene.glb'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-
+import * as THREE from 'three'
+// import Draggable from 'react-draggable'; // Import react-draggable
+   var furn1Gltf
 function Room3D() {
-  function Model() {
-    const gltf = useGLTF(roomglb); // Replace with the actual path to your GLB model
-    return <primitive object={gltf.scene} />;
+  function Model({scale}) {
+    const gltf = useGLTF(roomglb);
+    
+
+    furn1Gltf = useGLTF(furn1glb);
+
+    const mesh = furn1Gltf.scene.children[0]; // Adjust the index if needed
+    const position = mesh.position;
+    // const roundedScale = Math.round(scale);
+    mesh.scale.set(2,2,2);
+
+    mesh.position.set(1,-1.2,1);
+  // Getting the position
+  
+
+  // Getting the bounding box
+  const boundingBox = new THREE.Box3();
+  boundingBox.setFromObject(mesh);
+
+  // Getting the size (dimensions) of the bounding box
+  const size = new THREE.Vector3();
+  boundingBox.getSize(size);
+  
+
+  console.log('Position:', position);
+  console.log('Size:', size);
+     // Replace with the actual path to your GLB model
+    return <>
+      <primitive object={gltf.scene} />
+      {/* <primitive object={furn1Gltf.scene} /> */}
+    </>
+    
+    ;
   }
+
+  
   // const notify = () => toast.info("This is a toast notification !");
 
   const [isBoxshow, setisBoxshow] = useState(false)
@@ -261,19 +296,23 @@ function Room3D() {
       <Canvas style={{ height: '80vh', width: '100%', background: 'lightblue' }}>
         <OrbitControls /> {/* Add OrbitControls to enable camera navigation */}
         {/* Load GLTF Model */}
-        <Model />
+        <Model scale={2}/>
 
 
         {/* Cube */}
-        {isBoxshow && <mesh position={boxdir}>
+        {isBoxshow &&
+        
+         <mesh position={boxdir}>
           <boxGeometry args={[2, 2, 2]} />
           <meshStandardMaterial color="red" />
-        </mesh>}
+        </mesh>
+        }
 
         {/* Sphere */}
         {isSphereShow && <mesh position={sphereDir}>
-          <sphereGeometry args={[1, 32, 32]} />
-          <meshStandardMaterial color="green" />
+          {/* <sphereGeometry args={[1, 32, 32]} />
+          <meshStandardMaterial color="green" /> */}
+          <primitive object={furn1Gltf?.scene}  />
         </mesh>}
 
         {/* Plane */}
@@ -305,6 +344,7 @@ function Room3D() {
           </div>}
 
         </div>
+        {/* <Stats/> */}
          
          {/* sphere */}
          <div style={{ display: 'flex', flexDirection: 'column', width: '20%',marginLeft:'20px' }}>
